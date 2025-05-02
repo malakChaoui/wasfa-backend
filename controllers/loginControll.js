@@ -11,7 +11,7 @@ const handlelogin = async(req,res)=>{
     //check for valid user in db
     const phone=editPhoneNumber(phoneNumber);
     const foundUser=await User.findOne({phoneNumber:phone}).exec();
-    if(!foundUser)return res.sendStatus(401);// Unauthorized
+    if(!foundUser)return res.status(401).json({'message':'Unauthorized ,no user with this information'});// Unauthorized
     console.log("user founded");
     //evalutae password
     const match = await bcrypt.compare(password,foundUser.password);

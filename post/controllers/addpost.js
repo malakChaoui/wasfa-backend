@@ -25,7 +25,7 @@ const addNewPost =async (req,res)=>{
         await post.save();
         
 
-        res.status(201).json({ message: 'New post created', post });
+        res.status(201).json({ message: 'New post created'});
     }catch(err){
         console.error('Error:', err.message);
         res.status(500).json({ message: 'Server error during.... ' });

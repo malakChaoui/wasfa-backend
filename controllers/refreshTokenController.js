@@ -4,7 +4,7 @@ const jwt=require('jsonwebtoken');
 const handleRefreshToken = async(req,res)=>{
     try{
     const {refreshToken}=req.body;
-    if(!refreshToken)return res.json({'message':'no refreshToken available'});
+    if(!refreshToken)return res.status(400).json({'message':'no refreshToken available'});
     //check for valid user in db
     const foundUser=await User.findOne({ refreshToken }).exec();
     if(!foundUser)return res.status(403).json({ 'message': 'Invalid refresh token (user not found)' });
