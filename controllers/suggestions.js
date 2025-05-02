@@ -1,7 +1,8 @@
 const Post=require('../model/Post');
 
 const getSuggestions= async(req,res)=>{
-    try{ const{query,limit=10,skip=0}=req.body;
+    try{ 
+        const { query, limit = 10, skip = 0 } = req.query;
       if(!query || query.trim()===""){
         return res.status(400).json({message:"Query is required"});
     }

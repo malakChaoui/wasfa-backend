@@ -1,5 +1,6 @@
 const express=require('express');
 const router=express.Router();
 const addPost=require('../post/controllers/addpost');
-router.post('/',addPost.addNewPost);
+const AccessVerify= require('../middleware/verifyJWT');
+router.post('/',AccessVerify,addPost.addNewPost);
 module.exports=router;

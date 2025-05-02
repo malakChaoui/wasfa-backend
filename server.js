@@ -6,6 +6,7 @@ const connectDB=require('./config/connectDB');
 const PORT= process.env.PORT || 3700;
 
 
+
 //connect to mongoDB
 connectDB();
 
@@ -23,14 +24,14 @@ app.use('/registerNewUser',require('./routes/register'));
 app.use('/login',require('./routes/login'));
 app.use('/refresh',require('./routes/refresh'));
 app.use('/logout',require('./routes/logout'));
-app.use('/verifyAccess',require('./routes/AccessVerify'));
 app.use('/addPost',require('./routes/addpost'));
 app.use('/addpfp',require('./routes/adduserpfp'));
 app.use('/sendCode',require('./routes/sendCode'));
 app.use('/getSuggestions',require('./routes/suggest'));
-app.use('/forgotchangepwd',require('./routes/forgotchangepassword'));
-app.use('/verifychangepwd',require('./routes/verifyForgottenPWD'));
+app.use('/save-new-pwd',require('./routes/forgotchangepassword'));
+app.use('/verify-to-changepwd',require('./routes/verifyForgottenPWD'));
 app.use('/getPosts',require('./routes/getPostes'));
+app.use('/get-me',require('./routes/Getme'));
 mongoose.connection.once('open',()=>{
     console.log('connected to mongoDB');
     app.listen(PORT,()=>console.log(`server running on port ${PORT}`));

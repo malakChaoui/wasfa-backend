@@ -11,10 +11,10 @@ const addpfpURL =async (req,res)=>{
         //create and store the new user pfp
         foundUser.pfpURL=pfpURL;
         await foundUser.save();
-        console.log(foundUser);
+        console.log('new user:',foundUser);
         res.status(201).json({'message':`new user: ${foundUser.username} add a new profile photo`});
     }catch(err){
-        console.error('Error registering user:', err.message);
+        console.error('Error working with user:', err.message);
         res.status(500).json({ message: 'Server error during ...' });
 
     }

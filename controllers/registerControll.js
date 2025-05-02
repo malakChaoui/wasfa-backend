@@ -23,7 +23,7 @@ const registerNewUser =async (req,res)=>{
             address
         });
         await user.save();
-        console.log(user);
+
         
         //create JWTs
         const userID=user._id;
@@ -47,7 +47,8 @@ const registerNewUser =async (req,res)=>{
         );
         user.refreshToken=refreshToken;
         await user.save();
-        res.status(201).json({'message':`new user: ${username} was created`,refreshToken,accessToken});
+        //console.log(user);
+        res.status(201).json({'message':`new user: ${username} was created`,'userID':`${user._id}`,refreshToken,accessToken});
     }catch(err){
         console.error('Error registering user:', err.message);
         res.status(500).json({ message: 'Server error during registration' });

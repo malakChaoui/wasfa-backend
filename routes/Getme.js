@@ -1,6 +1,6 @@
 const express=require('express');
 const router=express.Router();
-const addpfp=require('../controllers/addapfp');
+const getme=require('../controllers/getmeController');
 const AccessVerify= require('../middleware/verifyJWT');
-router.post('/',AccessVerify,addpfp.addpfpURL);
+router.get('/',AccessVerify,getme.getme);
 module.exports=router;

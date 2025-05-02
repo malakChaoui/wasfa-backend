@@ -23,7 +23,7 @@ const addNewPost =async (req,res)=>{
            address:foundUser.address,
         });
         await post.save();
-        console.log(post);
+        
 
         res.status(201).json({ message: 'New post created', post });
     }catch(err){

@@ -1,6 +1,7 @@
 const User=require('../model/User');
 const bcrypt=require('bcrypt');
 const jwt=require('jsonwebtoken');
+const editPhoneNumber=require('./editPhoneNumber');
 require('dotenv').config();
 
 const handlelogin = async(req,res)=>{
@@ -8,7 +9,8 @@ const handlelogin = async(req,res)=>{
     const {password,phoneNumber}=req.body;
     if(!password || !phoneNumber)return res.status(400).json({'message':'phoneNumber and password are required'});
     //check for valid user in db
-    const foundUser=await User.findOne({phoneNumber:phoneNumber}).exec();
+    const phone=editPhoneNumber(phoneNumber);
+    const foundUser=await User.findOne({phoneNumber:phone}).exec();
     if(!foundUser)return res.sendStatus(401);// Unauthorized
     console.log("user founded");
     //evalutae password
@@ -39,7 +41,7 @@ const handlelogin = async(req,res)=>{
          foundUser.refreshToken=refreshToken;
          const result = await foundUser.save();
          console.log("user refresh token was created and saved");
-         return res.json({refreshToken,accessToken});
+         return res.json({'userID':`${foundUser._id}`,refreshToken,accessToken});
         } else{
         res.sendStatus(401);
     }
