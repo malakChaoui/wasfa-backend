@@ -31,6 +31,8 @@ app.use('/getSuggestions',require('./routes/suggest'));
 app.use('/save-new-pwd',require('./routes/forgotchangepassword'));
 app.use('/verify-to-changepwd',require('./routes/verifyForgottenPWD'));
 app.use('/getPosts',require('./routes/getPostes'));
+app.use('/savePost',require('./routes/saveposts'));
+app.use('/get-saved-posts',require('./routes/getsavedpostes'));
 app.use('/get-me',require('./routes/Getme'));
 mongoose.connection.once('open',()=>{
     console.log('connected to mongoDB');

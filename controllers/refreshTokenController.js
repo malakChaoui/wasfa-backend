@@ -24,7 +24,7 @@ const handleRefreshToken = async(req,res)=>{
                     "createdAT":Date.now()
                 },
                     process.env.ACCESS_TOKEN_SECRET,
-                 {expiresIn:'1h'}
+                 {expiresIn:'30d'}
             );
             res.json({accessToken})
         }

@@ -26,7 +26,7 @@ const handlelogin = async(req,res)=>{
                 "createdAT":Date.now()
             },
                 process.env.ACCESS_TOKEN_SECRET,
-                {expiresIn:'1h'}
+                {expiresIn:'30d'}
         );
         const refreshToken=jwt.sign(
             {
@@ -35,7 +35,7 @@ const handlelogin = async(req,res)=>{
                 "createdAT":Date.now()
             },
                 process.env.REFRESH_TOKEN_SECRET,
-                {expiresIn:'1d'}
+                {expiresIn:'50d'}
          );
          // Saving refrenshToken with current user
          foundUser.refreshToken=refreshToken;

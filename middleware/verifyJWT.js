@@ -13,7 +13,7 @@ const verifyJwt=(req,res,next)=>{
         token,
         process.env.ACCESS_TOKEN_SECRET,
         (err,decoded)=>{
-            if(err)return res.sendStatus(403);// Invalid token
+            if(err)return res.status(403).json({message:'Invalid  access token'});// Invalid token
             console.log("user Access valid ");
             req.user = {
                 username:decoded.username,
