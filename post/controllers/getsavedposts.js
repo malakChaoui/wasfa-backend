@@ -7,12 +7,37 @@ const getSavedPosts = async (req, res) => {
         
 
     try {
-        const user = await User.findById(userid).populate('savedPosts');
+        //const user = await User.findById(userid).populate('savedPosts');
+        const user = await User.findById(userid)
+            .populate({
+                path: 'savedPosts',
+                populate: {
+                    path: 'user',
+                    select: 'username phoneNumber pfpURL address' // only return selected fields
+                }
+            });
          if (!user) return res.status(404).json({ message: 'User not found' });
-
-        res.status(200).json({ savedPosts: user.savedPosts });
+             res.status(200).json({
+            
+                savedPosts: user.savedPosts.map(post => ({
+                    _id: post._id,
+                    user: post.user?._id,
+                    name: post.user?.username,
+                    medication: post.medication,
+                    createdAt: post.createdAt,
+                    quantity: post.quantity,
+                    expiryDate: post.expiryDate,
+                    phoneNumber: post.user?.phoneNumber,
+                    note: post.note,
+                    imageURL: post.imageURL,
+                    address: post.address,
+                    pfpImageURL: post.user?.pfpURL,
+                    location: post.location,
+                    
+                }))
+            });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message:' error accured' });
     }
 };
 module.exports={ getSavedPosts };

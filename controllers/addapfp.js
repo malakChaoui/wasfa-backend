@@ -3,7 +3,8 @@ const User=require('../model/User');
 
 
 const addpfpURL =async (req,res)=>{
-    const {userid,pfpURL}=req.body;
+    const {pfpURL}=req.body;
+    const userid=req.user.id;
     if(!userid || !pfpURL)return res.status(400).json({'message':'All fields are required'});
      const foundUser = await User.findById(userid).exec();
      if (!foundUser) return res.status(404).json({ message: 'User not found' });

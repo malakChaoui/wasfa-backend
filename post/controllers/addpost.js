@@ -3,7 +3,8 @@ const User=require('../../model/User');
 
 
 const addNewPost =async (req,res)=>{
-    const {imageURL,medication,quantity,expiryDate,note,userid}=req.body;
+    const {imageURL,medication,quantity,expiryDate,note}=req.body;
+    const userid=req.user.id;
     if(!imageURL || !medication ||!quantity ||!expiryDate ||!userid)return res.status(400).json({'message':'All fields are required'});
     const foundUser = await User.findById(userid).exec();
     if (!foundUser) return res.status(404).json({ message: 'User not found' });

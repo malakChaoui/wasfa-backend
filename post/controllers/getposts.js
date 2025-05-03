@@ -17,9 +17,29 @@ const getPosts =async (req,res)=>{
         })
         .skip(skip)
         .limit(limit)
-        .sort({ createdAt: -1 }); // Sort by createdAt in descending order
+        .sort({ createdAt: -1 })// Sort by createdAt in descending order
+        .populate('user','username phoneNumber address  pfpURL'); 
         //console.log(posts);
-        res.status(200).json(posts);
+        const formattedPosts = posts.map(post => {
+            const { _id, username, phoneNumber, pfpURL } = post.user || {};
+            return {
+                _id: post._id,
+                user: _id,
+                name: username,
+                medication: post.medication,
+                createdAt: post.createdAt,
+                quantity: post.quantity,
+                expiryDate: post.expiryDate,
+                phoneNumber,
+                note: post.note,
+                imageURL: post.imageURL,
+                address: post.address,
+                pfpImageURL: pfpURL,
+                location: post.location
+            };
+        });
+
+        res.status(200).json(formattedPosts);
     }catch(err){
         console.error('Error:', err.message);
         res.status(500).json({ message: 'Server error during.... ' });

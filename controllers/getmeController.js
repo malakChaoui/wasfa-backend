@@ -12,7 +12,7 @@ const getme =async (req,res)=>{
             name: foundUser.username,
             phone: foundUser.phoneNumber,
             address: foundUser.address,
-            langitude: foundUser.langitude,
+            longitude: foundUser.langitude,
             latitude: foundUser.latitude,
             pfpURL: foundUser.pfpURL,
             

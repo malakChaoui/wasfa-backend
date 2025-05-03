@@ -2,7 +2,8 @@ const User = require('../../model/User');
 
 
 const savePost = async (req, res) => {
-    const { userId, postId} = req.body;
+    const {postId} = req.body;
+   const  userId=req.user.id;
     if (!userId || !postId) {
         return res.status(400).json({ message:'userId and postId are required' });
     }
@@ -18,7 +19,7 @@ const savePost = async (req, res) => {
         await user.save();
         res.status(201).json({ message: 'post saved successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'error accured' });
     }
 };
 module.exports={ savePost };
