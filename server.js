@@ -1,12 +1,13 @@
 require('dotenv').config();
 const express=require('express');
 const app=express();
+const cors = require('cors');
 const mongoose=require('mongoose');
 const connectDB=require('./config/connectDB');
 const PORT= process.env.PORT || 3700;
 
 
-
+app.use(cors());
 //connect to mongoDB
 connectDB();
 
@@ -34,6 +35,10 @@ app.use('/getPosts',require('./routes/getPostes'));
 app.use('/savePost',require('./routes/saveposts'));
 app.use('/get-saved-posts',require('./routes/getsavedpostes'));
 app.use('/get-me',require('./routes/Getme'));
+app.use('/get-my-posts',require('./routes/getmyposts'));
+app.use('/edit-post',require('./routes/editmypost'));
+app.use('/deletePost',require('./routes/deletePost'));
+app.use('/unsavePost',require('./routes/unsavePost'));
 mongoose.connection.once('open',()=>{
     console.log('connected to mongoDB');
     app.listen(PORT,()=>console.log(`server running on port ${PORT}`));
