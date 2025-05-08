@@ -17,9 +17,9 @@ const getSavedPosts = async (req, res) => {
                 }
             });
          if (!user) return res.status(404).json({ message: 'User not found' });
-             res.status(200).json({
+             res.status(200).json(
             
-                savedPosts: user.savedPosts.map(post => ({
+                user.savedPosts.map(post => ({
                     _id: post._id,
                     user: post.user?._id,
                     name: post.user?.username,
@@ -34,8 +34,9 @@ const getSavedPosts = async (req, res) => {
                     pfpImageURL: post.user?.pfpURL,
                     location: post.location,
                     
+                    
                 }))
-            });
+            );
     } catch (error) {
         res.status(500).json({ message:' error accured' });
     }
