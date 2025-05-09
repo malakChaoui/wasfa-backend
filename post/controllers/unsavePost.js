@@ -2,9 +2,13 @@ const Post = require('../../model/Post');
 const User = require('../../model/User');
 
 const unsavePost = async (req, res) => {
-    const {postId} = req.body;
-    const userId=req.user.id;
+   
     try {
+        const {postId} = req.body;
+        const userId=req.user.id;
+        if(!userId || !postId) {
+            return res.status(400).json({ message: 'userId and postId are required' });
+        }
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });

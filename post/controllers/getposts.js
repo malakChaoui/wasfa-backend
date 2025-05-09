@@ -3,9 +3,12 @@ const Post=require('../../model/Post');
 
 const getPosts =async (req,res)=>{
     const {latitude,langitude,limit=10,skip=0}=req.query;
+    userId=req.user.id;
     if(!latitude || !langitude)return res.status(400).json({'message':'All fields are required'});
+    if(!userId) return res.status(400).json({'message':'User ID is required'});
     try{
         const posts = await Post.find({
+            user:{ $ne:userId},//exclude current user's posts
             location: {
                 $near: {
                     $geometry: {

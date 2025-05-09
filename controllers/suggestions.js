@@ -7,13 +7,18 @@ const getSuggestions= async(req,res)=>{
     try{ 
         const { query, limit = 10, skip = 0 } = req.query;
       if(!query || query.trim()===""){
-        return res.status(400).json({message:"Query is required"});
-    }
-    const suggestions=await Post.find({medication:{$regex:query,$options:'i'}})
-    .limit(parseInt(limit))
-    .skip(parseInt(skip))
-    .populate('user','username phoneNumber address  pfpURL');
-    const formattedSuggestions = suggestions.map(post => {
+        return res.status(400).json({message:"Query is required"});}
+        const UserId = req.user.id;
+        if (!UserId) {
+            return res.status(401).json({ message: "Unauthorized: User ID not found" });
+        }
+    
+      const suggestions=await Post.find({medication:{$regex:query,$options:'i'},
+      user: { $ne: UserId } })
+      .limit(parseInt(limit))
+      .skip(parseInt(skip))
+      .populate('user','username phoneNumber address  pfpURL');
+      const formattedSuggestions = suggestions.map(post => {
         const { _id, username, phoneNumber, pfpURL } = post.user || {};
         return {
             _id: post._id,
@@ -30,9 +35,9 @@ const getSuggestions= async(req,res)=>{
             pfpImageURL: pfpURL,
             location: post.location
         };
-    });
+     });
 
-    res.status(200).json(formattedSuggestions);
+     res.status(200).json(formattedSuggestions);
     
     }catch(error){
         console.error('Error in getSuggestions:', error);
