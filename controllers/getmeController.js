@@ -9,6 +9,7 @@ const getme =async (req,res)=>{
         const foundUser = await User.findById(userid).exec();
      if (!foundUser) return res.status(404).json({ message: 'User not found' });
         res.json({
+            id:foundUser._id,
             name: foundUser.username,
             phone: foundUser.phoneNumber,
             address: foundUser.address,
