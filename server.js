@@ -19,7 +19,7 @@ app.use(cors());
 connectDB();
 
 // Track connected clients and their chat rooms
-const clients = new Map(); // socket => chatId
+const clients = new Map(); // Map<socket, Set<chatIds>>
 
 
 //buitt-in middleware to handle urlencoded data
@@ -53,6 +53,7 @@ app.use('/unsavePost',require('./routes/unsavePost'));
 app.use('/get-or-create-chat',require('./routes/chat'));
 app.use('/getMessages',require('./routes/getMessages'));
 app.use('/get-chat-list',require('./routes/getChatList'));
+app.use('/get-talked-users',require('./routes/getTalkedUsers'));
 
 
 
@@ -65,7 +66,10 @@ wss.on('connection', (socket) => {
        // Handle joining a chat room
       if (msg.type === 'join') {
         const { chatId } = msg.payload;
-        clients.set(socket, chatId);
+        if (!clients.has(socket)) {
+       clients.set(socket, new Set());
+      }
+      clients.get(socket).add(chatId);
         console.log(`Client joined chat ${chatId}`);
       }
       // Handle sending a message
@@ -75,43 +79,18 @@ wss.on('connection', (socket) => {
         // Save message in DB
         const message = await sendMessage({ chatId, senderId, text });
         // Broadcast to everyone in the same chat
-        for (const [clientSocket, roomId] of clients.entries()) {
-          if (roomId === chatId && clientSocket.readyState === WebSocket.OPEN) {
+        for (const [clientSocket, roomIds] of clients.entries()) {
+          if (roomIds.has(chatId) && clientSocket.readyState === WebSocket.OPEN) {
             clientSocket.send(JSON.stringify({
               type: 'newMessage',
-              payload: message
+              payload: {
+              content: msg.payload.text,
+              senderId: msg.payload.senderId,
+      }
             }));
           }
         }
-       const chat = await Chat.findById(chatId)
-        .populate('user1', 'username pfpURL')
-        .populate('user2', 'username pfpURL')
-        .populate('lastMessage');
-
-         const isUser1 = chat.user1._id.toString() === senderId;
-         const receiver = !isUser1 ? chat.user2 : chat.user1;
-
-// This is the new chat preview item
-const updatedChatItem = {
-  chatId: chat._id,
-  user: {
-    _id: receiver._id,
-    username: receiver.username,
-    pfpURL: receiver.pfpURL
-  },
-  lastMessage: chat.lastMessage.text,
-  time:Math.floor((Date.now() - new Date(chat.lastMessage.createdAt).getTime())/(1000*60)) ,
-};
-
-// Broadcast chat list update
-for (const [clientSocket, roomId] of clients.entries()) {
-  if (roomId === chatId && clientSocket.readyState === WebSocket.OPEN) {
-    clientSocket.send(JSON.stringify({
-      type: 'chatListUpdate',
-      payload: updatedChatItem
-    }));
-  }
-}
+       
 
       }
     } catch (err) {
