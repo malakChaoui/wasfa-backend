@@ -10,8 +10,8 @@ const getChatList = async (req, res) => {
       $or: [{ user1: userId }, { user2: userId }]
     })
       .populate('lastMessage')
-      .populate('user1', 'username pfpURL')
-      .populate('user2', 'username pfpURL')
+      .populate('user1', 'username pfpURL phoneNumber')
+      .populate('user2', 'username pfpURL phoneNumber')
       .lean();
 
     const chatList = chats.map(chat => {
@@ -23,7 +23,8 @@ const getChatList = async (req, res) => {
         user: {
           _id: otherUser._id,
           username: otherUser.username,
-          pfpURL: otherUser.pfpURL
+          pfpURL: otherUser.pfpURL,
+          phoneNumber: otherUser.phoneNumber,
         },
         lastMessage: chat.lastMessage,
         time:Math.floor((Date.now() - new Date(chat.lastMessage.createdAt).getTime())/(1000*60)) ,

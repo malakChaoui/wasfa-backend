@@ -53,7 +53,7 @@ app.use('/unsavePost',require('./routes/unsavePost'));
 app.use('/get-or-create-chat',require('./routes/chat'));
 app.use('/getMessages',require('./routes/getMessages'));
 app.use('/get-chat-list',require('./routes/getChatList'));
-app.use('/get-talked-users',require('./routes/getTalkedUsers'));
+app.use('/searchChats',require('./routes/getTalkedUsers'));
 
 
 

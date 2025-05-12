@@ -1,8 +1,8 @@
 const Chat = require('../../model/Chat');
 
-
 const getTalkedUsers = async (req, res) => {
   const userId = req.user.id;
+  const usernameQuery = req.query.username?.toLowerCase() || '';
 
   try {
     const chats = await Chat.find({
@@ -35,7 +35,14 @@ const getTalkedUsers = async (req, res) => {
       }
     }
 
-    const uniqueUsersWithChatId = Array.from(uniqueMap.values());
+    let uniqueUsersWithChatId = Array.from(uniqueMap.values());
+
+    // 🔍 Filter by username query if provided
+    if (usernameQuery) {
+      uniqueUsersWithChatId = uniqueUsersWithChatId.filter(item =>
+        item.user.username.toLowerCase().includes(usernameQuery)
+      );
+    }
 
     res.status(200).json(uniqueUsersWithChatId);
   } catch (err) {
