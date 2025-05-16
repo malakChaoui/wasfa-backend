@@ -16,7 +16,7 @@ const getChatList = async (req, res) => {
 
     const chatList = chats.map(chat => {
       const isUser1 = chat.user1._id.toString() === userId;
-      const otherUser = !isUser1 ? chat.user2 : chat.user1;
+      const otherUser = isUser1 ? chat.user2 : chat.user1;
 
       return {
         chatId: chat._id,
