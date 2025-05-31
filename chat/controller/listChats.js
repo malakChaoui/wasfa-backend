@@ -36,7 +36,7 @@ const getChatList = async (req, res) => {
     });
 
     // Sort by lastActivity descending
-    chatList.sort((a, b) => b.time - a.time);
+    chatList.sort((a, b) => a.time - b.time);
 
     res.status(200).json(chatList);
   } catch (err) {
