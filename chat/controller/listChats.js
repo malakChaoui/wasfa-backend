@@ -16,7 +16,7 @@ const getChatList = async (req, res) => {
 
     const chatList = chats.map(chat => {
       const isUser1 = chat.user1._id.toString() === userId;
-      const otherUser = !isUser1 ? chat.user2 : chat.user1;
+      const otherUser = isUser1 ? chat.user2 : chat.user1;
 
       return {
         chatId: chat._id,
@@ -28,7 +28,10 @@ const getChatList = async (req, res) => {
           address: otherUser.address,
         },
         lastMessage: chat.lastMessage,
-        time:Math.floor((Date.now() - new Date(chat.lastMessage.createdAt).getTime())/(1000*60)) ,
+        //time:Math.floor((Date.now() - new Date(chat.lastMessage.createdAt).getTime())/(1000*60)) ,
+        time: chat.lastMessage
+         ? Math.floor((Date.now() - new Date(chat.lastMessage.createdAt).getTime()) / (1000 * 60))
+         : null,
       };
     });
 
